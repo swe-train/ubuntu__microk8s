@@ -45,7 +45,8 @@ This database can be used to replace etcd in the microk8s cluster.
 - ...
 
 
-Build K8s-dqlite:
+#### Build K8s-dqlite:
+These are the instructions from the `snapcraft.yaml`:
 ```
   k8s-dqlite:
     after: [build-deps]
@@ -59,4 +60,25 @@ Let's break it apart:
 - after: we can only build the component after we've installed all the build-deps
 - source: points to the source code or necessary files (but not used)
 - plugin: this is no standard Snapcraft plugin
-- override-build: 
+- override-build: The script to build the specified component.
+
+So we have to go into the microk8s dir and build the component:
+```
+cd microk8s/
+./build-scripts/build-component.sh k8s-dqlite
+```
+
+What does the `build-component.sh` script do?
+
+Go to build-scripts/components/k8s-dqlite. You should see (at least 3 files)
+- repository: the git repo
+- version: the version of our component
+- build.sh: a build script for this specific component.
+
+The build script grabs the components git repo and downloads our specific component's version.
+Then it makes sure everything that got installed gets placed in the right location.
+
+Where does k8s-dqlite get installed?
+```
+ls /home/ubuntu/microk8s/build-scripts/.install/bin/
+```
